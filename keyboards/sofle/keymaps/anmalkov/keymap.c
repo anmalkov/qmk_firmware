@@ -130,10 +130,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_COLN, KC_7,    KC_8,    KC_9,    _______, _______,
   _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       KC_PPLS, KC_4,    KC_5,    KC_6,    KC_PSLS, _______,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, KC_PMNS, KC_1,    KC_2,    KC_3,    KC_PAST, _______,
-                    _______, _______, _______, _______, _______,     _______, LLOCK,   KC_PCMM, KC_0,    KC_PDOT
+                    _______, _______, _______, _______, _______,     _______, LLOCK,   KC_COMM, KC_0,    KC_DOT
 ),
 
-/* SYM
+/* SYM 
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |  F1  |  F2  |  F3  |  F4  |  F5  |                    |  F6  |  F7  |  F8  |  F9  |  F10 |  F11 |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -192,7 +192,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [WIN] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                       _______, _______,    _______, _______,     _______, KC_SLEEP,
+  _______, _______, _______, _______, _______, _______,                       _______, _______,    _______, _______,     _______, KC_SLEP,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       _______, _______,    _______, _______,     _______, _______,
   _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       _______, G(KC_LEFT), _______, G(KC_RIGHT), _______, _______,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, _______, _______,    _______, _______,     _______, _______,
