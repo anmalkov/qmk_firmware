@@ -21,7 +21,7 @@ LAYER_LOCK_ENABLE = yes
 OPT_DEFS += -DLAYER_LOCK_ENABLE
 SRC += features/layer_lock.c
 
-ORBITAL_MOUSE_ENABLE = yes
-MOUSE_ENABLE = yes
-OPT_DEFS += -DORBITAL_MOUSE_ENABLE
-SRC += features/orbital_mouse.c
+# ORBITAL_MOUSE_ENABLE = yes
+# MOUSE_ENABLE = yes
+# OPT_DEFS += -DORBITAL_MOUSE_ENABLE
+# SRC += features/orbital_mouse.c
