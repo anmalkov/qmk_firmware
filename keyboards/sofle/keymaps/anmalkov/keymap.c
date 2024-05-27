@@ -34,6 +34,7 @@ enum sofle_layers {
 
 enum custom_keycodes {
     SELLINE = SAFE_RANGE,  // Selects the current line
+    SELWORD,               // Selects the current word
     LLOCK,                 // Locks the layer
     LMBDA,                 // Lambda (=>)
     UPDIR,                 // Up directory (../)
@@ -92,22 +93,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      | LLOCK|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    | PgUp | Home |  Up  |  End |C-PgUp|      |
+ * |      |      |      |      |      |      |                    | PgUp | Home |  Up  |  End | Redo |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |  Alt | Ctrl | Shift|      |                    | PgDn | Left | Down | Right|C-PgDn|Ctrl+A|
+ * |      |      |  Alt | Ctrl | Shift|      |                    | PgDn | Left | Down | Right| Undo |      |
  * |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
- * |      |      |      |      |      |      |       |    |       |Select| Copy | Paste|  Cut | Undo | Redo |
- * |      |      |      |      |      |      |       |    |       | line |      |      |      |      |      |
+ * |      |      |      |      |      |      |       |    |       |Select| Copy | Paste|  Cut |Select|Ctrl+A|
+ * |      |      |      |      |      |      |       |    |       | word |      |      |      | line |      |
  * '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
  *               |      |      |      |      |       |    |       |      |      |      |      |
  *               |      |      |      |      |       |    |       |      |      |      |      |
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [NAV] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______,  _______,    LLOCK,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,   C(KC_PGUP), _______,
-  _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RIGHT, C(KC_PGDN), C(KC_A),
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, SELLINE, C(KC_C), C(KC_V),  C(KC_X), C(KC_Z),    C(KC_Y),
+  _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______,  _______, LLOCK,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,   C(KC_Y), _______,
+  _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RIGHT, C(KC_Z), _______,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, SELWORD, C(KC_C), C(KC_V), C(KC_X),  SELLINE, C(KC_A),
                     _______, _______, _______, _______, _______,     _______, _______, _______, _______, _______
 ),
 
@@ -115,22 +116,22 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * ,-----------------------------------------.                    ,-----------------------------------------.
  * |      |      |      |      |      |      |                    | Calc |      |      |      |      | LLOCK|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |   +  |   7  |   8  |   9  |   *  |      |
+ * |      |      |      |      |      |      |                    |   :  |   7  |   8  |   9  |   =  |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |  Alt | Ctrl | Shift|      |                    |   -  |   4  |   5  |   6  |   /  |      |
+ * |      |      |  Alt | Ctrl | Shift|      |                    |   +  |   4  |   5  |   6  |   *  |      |
  * |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
- * |      |      |      |      |      |      |       |    |       |   :  |   1  |   2  |   3  |   =  |      |
+ * |      |      |      |      |      |      |       |    |       |   -  |   1  |   2  |   3  |   /  |      |
  * '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
- *               |      |      |      |      |       |    |       |      |   ,  |   0  |   .  |
+ *               |      |      |      |      |       |    |       |      |      |   0  |   .  |
  *               |      |      |      |      |       |    |       |      |      |      |      |
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [NUM] = LAYOUT(
   _______, _______, _______, _______, _______, _______,                       KC_CALC, _______, _______, _______, _______, LLOCK,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PPLS, KC_7,    KC_8,    KC_9,    KC_PAST, _______,
-  _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       KC_PMNS, KC_4,    KC_5,    KC_6,    KC_PSLS, _______,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, KC_COLN, KC_1,    KC_2,    KC_3,    KC_PEQL, _______,
-                    _______, _______, _______, _______, _______,     _______, _______, KC_COMM, KC_0,    KC_DOT
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_COLN, KC_7,    KC_8,    KC_9,    KC_PEQL, _______,
+  _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       KC_PPLS, KC_4,    KC_5,    KC_6,    KC_PAST, _______,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, KC_PMNS, KC_1,    KC_2,    KC_3,    KC_PSLS, _______,
+                    _______, _______, _______, _______, _______,     _______, _______, _______, KC_0,    KC_DOT
 ),
 
 /* SYM 
@@ -238,6 +239,9 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
       case SELLINE:  // Selects the current line.
         SEND_STRING_DELAY(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END)), TAP_CODE_DELAY);
+        return false;
+      case SELWORD:  // Selects the current word.
+        SEND_STRING_DELAY(SS_LCTL(SS_TAP(X_LEFT)) SS_LSFT(SS_LCTL(SS_TAP(X_RIGHT))), TAP_CODE_DELAY);
         return false;
       case LMBDA:  // Lambda (=>).
         SEND_STRING_DELAY("=>", TAP_CODE_DELAY);
