@@ -13,7 +13,8 @@ Custom keymap by [@anmalkov](https://github.com/anmalkov) using a modified alpha
 - Custom keycodes: Select Line, Select Word, Lambda (`=>`), Up Directory (`../`), Double Click
 - OLED display showing current layer name
 - Left encoder: Volume Up/Down. Right encoder: Ctrl+Scroll (zoom)
-- 6 layers: BASE, NAV, NUM, SYM, MOUSE, PWT (Power Toys)
+- Switchable default layer: toggle between custom alpha and QWERTY (saved to EEPROM, persists across reboots)
+- 7 layers: BASE, QWERTY, NAV, NUM, SYM, MOUSE, PWT (Power Toys)
 
 ## Layers
 
@@ -28,6 +29,24 @@ Custom keymap by [@anmalkov](https://github.com/anmalkov) using a modified alpha
 |      | Space|  Alt | Ctrl | Shift|      |                    |      |Shift | Ctrl |  Alt |      |      |
 |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
 |   :  |   Q  |   J  |   V  |   D  |   K  |  mute |    | zoom  |   X  |   H  |   ,  |   .  |   ;  |   /  |
+'-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+              |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
+              |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+              '------'------'------'------'-------'    '-------'------'------'------'------'
+```
+
+### QWERTY
+Alternative base layer with standard QWERTY alpha keys. Same thumb row, home row mods, and layer switching as BASE. Toggle between BASE and QWERTY using `DF_TOGL` on the PWT layer.
+```
+.-----------------------------------------.                    .-----------------------------------------.
+|  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |                    |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+| Snip |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  \   |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|   -  |   A  |   S  |   D  |   F  |   G  |                    |   H  |   J  |   K  |   L  |   '  |   _  |
+|      | Space|  Alt | Ctrl | Shift|      |                    |      |Shift | Ctrl |  Alt |      |      |
+|------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+|   :  |   Z  |   X  |   C  |   V  |   B  |  mute |    | zoom  |   N  |   M  |   ,  |   .  |   ;  |   /  |
 '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
               |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
@@ -96,9 +115,10 @@ Custom keymap by [@anmalkov](https://github.com/anmalkov) using a modified alpha
 ```
 
 ### PWT (Power Toys)
+Toggle between BASE and QWERTY default layers using `DF_TOGL` (top-left key). Choice is saved to EEPROM.
 ```
 .-----------------------------------------.                    .-----------------------------------------.
-|      |      |      |      |      |      |                    |      |      |      |      |      | Sleep|
+|DFTOGL|      |      |      |      |      |                    |      |      |      |      |      | Sleep|
 |------+------+------+------+------+------|                    |------+------+------+------+------+------|
 |      |      |      |W+PgUp|      |      |                    |      |      |      |      |      |      |
 |------+------+------+------+------+------|                    |------+------+------+------+------+------|
@@ -119,7 +139,7 @@ Install QMK MSYS from: https://github.com/qmk/qmk_distro_msys/releases/latest
 After installation, open **QMK MSYS** from the Start Menu and run:
 
 ```bash
-qmk setup -H /path/to/your/qmk_firmware
+qmk setup -H /d/Apps/My/qmk/qmk_firmware/
 ```
 
 ### Compile
@@ -138,7 +158,7 @@ qmk flash -c -kb sofle/rev1 -km anmalkov -e CONVERT_TO=sparkfun_pm2040
 
 **Manual flashing (drag-and-drop):**
 
-1. Connect the **left** half via USB
+1. Connect the **left** half via USB-C
 2. **Double-click** the reset button on the PCB — a new USB drive named **RPI-RP2** will appear
 3. Copy the compiled `.uf2` file (e.g. `sofle_rev1_anmalkov_sparkfun_pm2040.uf2` from the QMK root directory) onto the **RPI-RP2** drive
 4. The board will reboot automatically after the copy completes

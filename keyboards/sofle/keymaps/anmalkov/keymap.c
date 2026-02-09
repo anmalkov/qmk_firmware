@@ -16,7 +16,7 @@
 #define TAB_NUM LT(NUM, KC_TAB)
 
 /* Layers
-                    BASE
+                 BASE / QWERTY
                       |
      .------+------+------+------.
      |      |      |      |      |
@@ -24,6 +24,7 @@
 */
 enum sofle_layers {
     BASE,
+    QWERTY,
     NAV,
     NUM,
     SYM,
@@ -38,6 +39,8 @@ enum custom_keycodes {
     UPDIR,                 // Up directory (../)
     BTN1_DBL,              // Double left mouse click
     C_SPC,                 // Tap: C, Hold: Space
+    A_SPC,                 // Tap: A, Hold: Space (QWERTY)
+    DF_TOGL,               // Toggle default layer BASE/QWERTY
 };
 
 /* EMPTY
@@ -86,6 +89,29 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   KC_MINS,    C_SPC, LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), KC_G,                             KC_M,    RSFT_T(KC_N), RCTL_T(KC_E), LALT_T(KC_I), KC_A,    KC_UNDS,
   KC_COLN,    KC_Q,  KC_J,         KC_V,         KC_D,         KC_K,       KC_MUTE,     _______, KC_X,    KC_H,         KC_COMM,      KC_DOT,       KC_SCLN, KC_SLSH,
                      KC_LGUI,      MO(MOUSE),    ESC_SYM,      BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      MO(PWT),      KC_RGUI
+),
+
+/* QWERTY
+ * .-----------------------------------------.                    .-----------------------------------------.
+ * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |                    |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * | Snip |   Q  |   W  |   E  |   R  |   T  |                    |   Y  |   U  |   I  |   O  |   P  |  \   |
+ * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
+ * |   -  |   A  |   S  |   D  |   F  |   G  |                    |   H  |   J  |   K  |   L  |   '  |   _  |
+ * |      | Space|  Alt | Ctrl | Shift|      |                    |      |Shift | Ctrl |  Alt |      |      |
+ * |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+ * |   :  |   Z  |   X  |   C  |   V  |   B  |  mute |    | zoom  |   N  |   M  |   ,  |   .  |   ;  |   /  |
+ * '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+ *               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
+ *               |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+ *               '------'------'------'------'-------'    '-------'------'------'------'------'
+ */
+[QWERTY] = LAYOUT(
+  KC_F1,      KC_F2, KC_F3,        KC_F4,        KC_F5,         KC_F6,                            KC_F7,   KC_F8,        KC_F9,        KC_F10,       KC_F11,  KC_F12,
+  SGUI(KC_S), KC_Q,  KC_W,         KC_E,         KC_R,          KC_T,                             KC_Y,    KC_U,         KC_I,         KC_O,         KC_P,    KC_BSLS,
+  KC_MINS,    A_SPC, LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F),  KC_G,                             KC_H,    RSFT_T(KC_J), RCTL_T(KC_K), LALT_T(KC_L), KC_QUOT, KC_UNDS,
+  KC_COLN,    KC_Z,  KC_X,         KC_C,         KC_V,          KC_B,       KC_MUTE,     _______, KC_N,    KC_M,         KC_COMM,      KC_DOT,       KC_SCLN, KC_SLSH,
+                     KC_LGUI,      MO(MOUSE),    ESC_SYM,       BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      MO(PWT),      KC_RGUI
 ),
 
 /* NAV
@@ -215,7 +241,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [PWT] = LAYOUT(
-  _______, _______,    _______,      _______,       _______,   _______,                       _______, _______, _______, _______, _______, KC_SLEP,
+  DF_TOGL, _______,    _______,      _______,       _______,   _______,                       _______, _______, _______, _______, _______, KC_SLEP,
   _______, XXXXXXX,    XXXXXXX,      LGUI(KC_PGUP), XXXXXXX,   XXXXXXX,                       _______, _______, _______, _______, _______, _______,
   _______, SGUI(KC_C), LAG(KC_SPC),  LGUI(KC_PGDN), SGUI(KC_T),XXXXXXX,                       _______, _______, _______, _______, _______, _______,
   _______, XXXXXXX,    XXXXXXX,      SGUI(KC_V),    XXXXXXX,   XXXXXXX, _______,     _______, _______, _______, _______, _______, _______, _______,
@@ -225,8 +251,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 #if defined(ENCODER_MAP_ENABLE)
 const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
-    [BASE]  = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(C(MS_WHLD), C(MS_WHLU)) },
-    [NAV]   = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
+    [BASE]   = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(C(MS_WHLD), C(MS_WHLU)) },
+    [QWERTY] = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(C(MS_WHLD), C(MS_WHLU)) },
+    [NAV]    = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
     [NUM]   = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
     [SYM]   = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
     [MOUSE] = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
@@ -236,6 +263,7 @@ const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
 
 static bool c_spc_held = false;
 static uint16_t c_spc_timer = 0;
+static uint16_t c_spc_keycode = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   #ifdef ACHORDION_ENABLE
@@ -247,8 +275,10 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   if (record->event.pressed) {
     switch (keycode) {
       case C_SPC:  // Tap: C, Hold: Space
+      case A_SPC:  // Tap: A, Hold: Space
         c_spc_timer = timer_read();
         c_spc_held = false;
+        c_spc_keycode = keycode;
         return false;
       case SELLINE:  // Selects the current line.
         SEND_STRING_DELAY(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END)), TAP_CODE_DELAY);
@@ -265,16 +295,23 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       case BTN1_DBL:  // Double left mouse click.
         SEND_STRING_DELAY(SS_TAP(X_MS_BTN1) SS_TAP(X_MS_BTN1), MOUSE_DBL_CLICK_DELAY);
         return false;
+      case DF_TOGL:  // Toggle default layer between BASE and QWERTY
+        if (get_highest_layer(default_layer_state) == QWERTY) {
+          set_single_persistent_default_layer(BASE);
+        } else {
+          set_single_persistent_default_layer(QWERTY);
+        }
+        return false;
     }
   } else {
     // Key released
-    if (keycode == C_SPC) {
+    if (keycode == C_SPC || keycode == A_SPC) {
       c_spc_timer = 0;
       if (c_spc_held) {
         unregister_code(KC_SPC);
         c_spc_held = false;
       } else {
-        tap_code(KC_C);
+        tap_code(keycode == C_SPC ? KC_C : KC_A);
       }
       return false;
     }
@@ -286,9 +323,12 @@ void print_layer_status(void) {
   oled_write_P(PSTR("\n\n"), false);
   oled_write_ln_P(PSTR("LAYER"), false);
   oled_write_P(PSTR("\n\n"), false);
-  switch (get_highest_layer(layer_state)) {
+  switch (get_highest_layer(layer_state | default_layer_state)) {
       case BASE:
         oled_write_ln_P(PSTR("BASE"), false);
+        break;
+      case QWERTY:
+        oled_write_ln_P(PSTR("QWRTY"), false);
         break;
       case NAV:
         oled_write_ln_P(PSTR("NAV"), false);
