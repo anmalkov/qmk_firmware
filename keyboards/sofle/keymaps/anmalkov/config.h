@@ -2,11 +2,6 @@
 
 #pragma once
 
-// Tri Layer
-#define TRI_LAYER_LOWER_LAYER 2
-#define TRI_LAYER_UPPER_LAYER 3
-#define TRI_LAYER_ADJUST_LAYER 4
-
 // Encoder
 #define ENCODER_DIRECTION_FLIP
 #define ENCODER_DIRECTION_FLIP_RIGHT

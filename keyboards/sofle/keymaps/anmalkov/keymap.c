@@ -1,11 +1,11 @@
- #include QMK_KEYBOARD_H
+// to compile:
+//     qmk compile -c -kb sofle/rev1 -km anmalkov -e CONVERT_TO=sparkfun_pm2040 
+ 
+#include QMK_KEYBOARD_H
 
 #ifdef ACHORDION_ENABLE
 #include "features/achordion.h"
 #endif  // ACHORDION_ENABLE
-#ifdef LAYER_LOCK_ENABLE
-#include "features/layer_lock.h"
-#endif  // LAYER_LOCK_ENABLE
 #ifdef ORBITAL_MOUSE_ENABLE
 #include "features/orbital_mouse.h"
 #endif  // ORBITAL_MOUSE_ENABLE
@@ -13,7 +13,6 @@
 #define BSPACE_NAV LT(NAV, KC_BSPC)
 #define ESC_SYM LT(SYM, KC_ESC)
 #define DEL_SYM LT(SYM, KC_DEL)
-#define LGUI_WIN LT(WIN, KC_LGUI)
 #define TAB_NUM LT(NUM, KC_TAB)
 
 /* Layers
@@ -21,7 +20,7 @@
                       |
      .------+------+------+------.
      |      |      |      |      |
-    NAV    NUM    SYM   MOUSE   WIN
+    NAV    NUM    SYM   MOUSE   PWT
 */
 enum sofle_layers {
     BASE,
@@ -29,16 +28,16 @@ enum sofle_layers {
     NUM,
     SYM,
     MOUSE,
-    WIN,
+    PWT,
 };
 
 enum custom_keycodes {
     SELLINE = SAFE_RANGE,  // Selects the current line
     SELWORD,               // Selects the current word
-    LLOCK,                 // Locks the layer
     LMBDA,                 // Lambda (=>)
     UPDIR,                 // Up directory (../)
     BTN1_DBL,              // Double left mouse click
+    C_SPC,                 // Tap: C, Hold: Space
 };
 
 /* EMPTY
@@ -72,21 +71,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * | Snip |   W  |   L  |   Y  |   P  |   B  |                    |   Z  |   F  |   O  |   U  |   '  |  \   |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
  * |   -  |   C  |   R  |   S  |   T  |   G  |                    |   M  |   N  |   E  |   I  |   A  |   _  |
- * |      |      |  Alt | Ctrl | Shift|      |                    |      |Shift | Ctrl |  Alt |      |      |
+ * |      | Space|  Alt | Ctrl | Shift|      |                    |      |Shift | Ctrl |  Alt |      |      |
  * |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
  * |   :  |   Q  |   J  |   V  |   D  |   K  |  mute |    | zoom  |   X  |   H  |   ,  |   .  |   ;  |   /  |
  * |      |      |      |      |      |      |       |    |       |      |      |      |      |      |      |
  * '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
- *               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |      |  Os  |
- *               |  WIN | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+ *               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
+ *               |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [BASE] = LAYOUT(
   KC_F1,      KC_F2, KC_F3,        KC_F4,        KC_F5,        KC_F6,                            KC_F7,   KC_F8,        KC_F9,        KC_F10,       KC_F11,  KC_F12,
   SGUI(KC_S), KC_W,  KC_L,         KC_Y,         KC_P,         KC_B,                             KC_Z,    KC_F,         KC_O,         KC_U,         KC_QUOT, KC_BSLS,
-  KC_MINS,    KC_C,  LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), KC_G,                             KC_M,    RSFT_T(KC_N), RCTL_T(KC_E), LALT_T(KC_I), KC_A,    KC_UNDS,
+  KC_MINS,    C_SPC, LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), KC_G,                             KC_M,    RSFT_T(KC_N), RCTL_T(KC_E), LALT_T(KC_I), KC_A,    KC_UNDS,
   KC_COLN,    KC_Q,  KC_J,         KC_V,         KC_D,         KC_K,       KC_MUTE,     _______, KC_X,    KC_H,         KC_COMM,      KC_DOT,       KC_SCLN, KC_SLSH,
-                     LGUI_WIN,     MO(MOUSE),    ESC_SYM,      BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      XXXXXXX,      KC_RGUI
+                     KC_LGUI,      MO(MOUSE),    ESC_SYM,      BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      MO(PWT),      KC_RGUI
 ),
 
 /* NAV
@@ -105,7 +104,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [NAV] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______,  _______, LLOCK,
+  _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______,  _______, QK_LLCK,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_PGUP, KC_HOME, KC_UP,   KC_END,   C(KC_Y), _______,
   _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       KC_PGDN, KC_LEFT, KC_DOWN, KC_RIGHT, C(KC_Z), _______,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, SELWORD, C(KC_C), C(KC_V), C(KC_X),  SELLINE, C(KC_A),
@@ -127,7 +126,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [NUM] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                       KC_CALC, _______, _______, _______, _______, LLOCK,
+  _______, _______, _______, _______, _______, _______,                       KC_CALC, _______, _______, _______, _______, QK_LLCK,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       KC_COLN, KC_7,    KC_8,    KC_9,    KC_PEQL, _______,
   _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       KC_PPLS, KC_4,    KC_5,    KC_6,    KC_PAST, _______,
   _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, KC_PMNS, KC_1,    KC_2,    KC_3,    KC_PSLS, _______,
@@ -149,7 +148,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [SYM] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, LLOCK,
+  _______, _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, QK_LLCK,
   _______, KC_UNDS, KC_LABK, KC_RABK, KC_DQUO, KC_GRV,                        KC_AMPR, LMBDA,   KC_LBRC, KC_RBRC, KC_PERC, _______,
   _______, KC_EXLM, KC_MINS, KC_PLUS, KC_EQL , KC_HASH,                       KC_PIPE, KC_COLN, KC_LPRN, KC_RPRN, KC_QUES, _______,
   _______, KC_CIRC, KC_SLSH, KC_ASTR, KC_BSLS, UPDIR,   _______,     _______, KC_TILD, KC_DLR , KC_LCBR, KC_RCBR, KC_AT,   _______,
@@ -172,7 +171,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 // orbital
 // [MOUSE] = LAYOUT(
-//   _______,  _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, LLOCK,
+//   _______,  _______, _______, _______, _______, _______,                       _______, _______, _______, _______, _______, QK_LLCK,
 //   _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       OM_DBLS, OM_BTNS, OM_U,    OM_BTN2, _______, _______,
 //   TO(BASE), XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       OM_HLDS, OM_L,    OM_D,    OM_R,    _______, TO(BASE),
 //   _______,  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, OM_RELS, OM_W_D , OM_W_U , _______, _______, _______,
@@ -194,35 +193,49 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [MOUSE] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                       _______,  _______, _______, _______, _______, LLOCK,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       BTN1_DBL, KC_BTN1, KC_MS_U, KC_BTN2, _______, _______,
-  _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       _______,  KC_MS_L, KC_MS_D, KC_MS_R, _______, _______,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, _______,  KC_WH_L, KC_WH_U, KC_WH_D, KC_WH_R, _______,
-                     _______, _______, _______, _______, _______,     _______, LLOCK,   _______, _______, _______
+  _______, _______, _______, _______, _______, _______,                       _______,  _______, _______, _______, _______, QK_LLCK,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       BTN1_DBL, MS_BTN1, MS_UP,   MS_BTN2, _______, _______,
+  _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       _______,  MS_LEFT, MS_DOWN, MS_RGHT, _______, _______,
+  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, _______,  MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, _______,
+                     _______, _______, _______, _______, _______,     _______, QK_LLCK, _______, _______, _______
 ),
 
-/* WIN
+/* PWT (Power Toys)
  * .-----------------------------------------.                    .-----------------------------------------.
  * |      |      |      |      |      |      |                    |      |      |      |      |      | Sleep|
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
+ * |      |      |      |W+PgUp|      |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |  Alt | Ctrl | Shift|      |                    |      |GUI+<-|      |GUI+->|      |      |
+ * |      |W+S+C |W+A+Sp|W+PgDn|W+S+T |      |                    |      |      |      |      |      |      |
  * |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
- * |      |      |      |      |      |      |       |    |       |      |      |      |      |      |      |
+ * |      |      |      |W+S+V |      |      |       |    |       |      |      |      |      |      |      |
  * '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
  *               |      |      |      |      |       |    |       |      |      |      |      |
  *               |      |      |      |      |       |    |       |      |      |      |      |
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
-[WIN] = LAYOUT(
-  _______, _______, _______, _______, _______, _______,                       _______, _______,    _______, _______,     _______, KC_SLEP,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                       _______, _______,    _______, _______,     _______, _______,
-  _______, XXXXXXX, KC_LALT, KC_LCTL, KC_LSFT, XXXXXXX,                       _______, G(KC_LEFT), _______, G(KC_RIGHT), _______, _______,
-  _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,     _______, _______, _______,    _______, _______,     _______, _______,
-                    _______, _______, _______, _______, _______,     _______, _______, _______,    _______, _______
+[PWT] = LAYOUT(
+  _______, _______,    _______,      _______,       _______,   _______,                       _______, _______, _______, _______, _______, KC_SLEP,
+  _______, XXXXXXX,    XXXXXXX,      LGUI(KC_PGUP), XXXXXXX,   XXXXXXX,                       _______, _______, _______, _______, _______, _______,
+  _______, SGUI(KC_C), LAG(KC_SPC),  LGUI(KC_PGDN), SGUI(KC_T),XXXXXXX,                       _______, _______, _______, _______, _______, _______,
+  _______, XXXXXXX,    XXXXXXX,      SGUI(KC_V),    XXXXXXX,   XXXXXXX, _______,     _______, _______, _______, _______, _______, _______, _______,
+                       _______,      _______,       _______,   _______, _______,     _______, _______, _______, _______, _______
 ),
 };
+
+#if defined(ENCODER_MAP_ENABLE)
+const uint16_t PROGMEM encoder_map[][NUM_ENCODERS][NUM_DIRECTIONS] = {
+    [BASE]  = { ENCODER_CCW_CW(KC_VOLD, KC_VOLU), ENCODER_CCW_CW(C(MS_WHLD), C(MS_WHLU)) },
+    [NAV]   = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
+    [NUM]   = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
+    [SYM]   = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
+    [MOUSE] = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
+    [PWT]   = { ENCODER_CCW_CW(_______, _______), ENCODER_CCW_CW(_______, _______) },
+};
+#endif
+
+static bool c_spc_held = false;
+static uint16_t c_spc_timer = 0;
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   #ifdef ACHORDION_ENABLE
@@ -231,12 +244,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   #ifdef ORBITAL_MOUSE_ENABLE
   if (!process_orbital_mouse(keycode, record)) { return false; }
   #endif  // ORBITAL_MOUSE_ENABLE
-  #ifdef LAYER_LOCK_ENABLE
-  if (!process_layer_lock(keycode, record, LLOCK)) { return false; }
-  #endif  // LAYER_LOCK_ENABLE
-
   if (record->event.pressed) {
     switch (keycode) {
+      case C_SPC:  // Tap: C, Hold: Space
+        c_spc_timer = timer_read();
+        c_spc_held = false;
+        return false;
       case SELLINE:  // Selects the current line.
         SEND_STRING_DELAY(SS_TAP(X_HOME) SS_LSFT(SS_TAP(X_END)), TAP_CODE_DELAY);
         return false;
@@ -250,27 +263,20 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         SEND_STRING_DELAY("../", TAP_CODE_DELAY);
         return false;
       case BTN1_DBL:  // Double left mouse click.
-        SEND_STRING_DELAY(SS_TAP(X_BTN1) SS_TAP(X_BTN1), MOUSE_DBL_CLICK_DELAY);
+        SEND_STRING_DELAY(SS_TAP(X_MS_BTN1) SS_TAP(X_MS_BTN1), MOUSE_DBL_CLICK_DELAY);
         return false;
     }
-  }
-  return true;
-}
-
-bool encoder_update_user(uint8_t index, bool clockwise) {
-  if (index == 0) {
-    // Left encoder
-    if (clockwise) {
-      tap_code(KC_VOLU);
-    } else {
-      tap_code(KC_VOLD);
-    }
-  } else if (index == 1) {
-    // Right encoder
-    if (clockwise) {
-      SEND_STRING_DELAY(SS_LCTL(SS_TAP(X_WH_U)), TAP_CODE_DELAY);
-    } else {
-      SEND_STRING_DELAY(SS_LCTL(SS_TAP(X_WH_D)), TAP_CODE_DELAY);
+  } else {
+    // Key released
+    if (keycode == C_SPC) {
+      c_spc_timer = 0;
+      if (c_spc_held) {
+        unregister_code(KC_SPC);
+        c_spc_held = false;
+      } else {
+        tap_code(KC_C);
+      }
+      return false;
     }
   }
   return true;
@@ -296,8 +302,8 @@ void print_layer_status(void) {
       case MOUSE:
         oled_write_ln_P(PSTR("MOUSE"), false);
         break;
-      case WIN:
-        oled_write_ln_P(PSTR("WIN"), false);
+      case PWT:
+        oled_write_ln_P(PSTR("PWT"), false);
         break;
       default:
         oled_write_ln_P(PSTR("Undef"), false);
@@ -351,6 +357,11 @@ bool oled_task_user(void) {
 }
 
 void matrix_scan_user(void) {
+  // C_SPC hold detection
+  if (c_spc_timer && !c_spc_held && timer_elapsed(c_spc_timer) > TAPPING_TERM) {
+    c_spc_held = true;
+    register_code(KC_SPC);
+  }
   #ifdef ACHORDION_ENABLE
   achordion_task();
   #endif  // ACHORDION_ENABLE

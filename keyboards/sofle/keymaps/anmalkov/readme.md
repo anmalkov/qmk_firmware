@@ -1,15 +1,145 @@
-![SofleKeyboard default keymap](https://i.imgur.com/MZxVvm9.png)
-![SofleKeyboard adjust layer](https://i.imgur.com/f5sKy0I.png)
+# Custom keymap for Sofle Keyboard
 
-# Default keymap for Sofle Keyboard
+Custom keymap by [@anmalkov](https://github.com/anmalkov) using a modified alpha layout with home row mods.
 
-Layout in [Keyboard Layout Editor](http://www.keyboard-layout-editor.com/#/gists/76efb423a46cbbea75465cb468eef7ff) and [adjust layer](http://www.keyboard-layout-editor.com/#/gists/4bcf66f922cfd54da20ba04905d56bd4)
+## Features
 
-Features:
+- Custom alpha layout (non-QWERTY)
+- Home row mods (Alt, Ctrl, Shift) with [Achordion](https://getreuer.info/posts/keyboards/achordion/) for misfire prevention
+- [Layer Lock](https://docs.qmk.fm/features/layer_lock) support (built-in `QK_LLCK`)
+- [Caps Word](https://docs.qmk.fm/features/caps_word) (activated by pressing both Shifts)
+- [Encoder Map](https://docs.qmk.fm/features/encoders#encoder-map) for declarative per-layer encoder behavior
+- Custom tap-hold on `C` key (tap: C, hold: Space)
+- Custom keycodes: Select Line, Select Word, Lambda (`=>`), Up Directory (`../`), Double Click
+- OLED display showing current layer name
+- Left encoder: Volume Up/Down. Right encoder: Ctrl+Scroll (zoom)
+- 6 layers: BASE, NAV, NUM, SYM, MOUSE, PWT (Power Toys)
 
-- Symmetric modifiers (CMD/Super, Alt/Opt, Ctrl, Shift)
-- Various modes, can be switched (using Adjust layer and the selected one is stored in EEPROM.
-- Modes for Qwerty and Colemak support
-- Modes for Mac vs Linux/Win support -> different order of modifiers and different action shortcuts on the "UPPER" layer (the red one in the image). Designed to simplify transtions when switching between operating systems often.
-- The OLED on master half shows selected mode and caps lock state and is rotated.
-- Left encoder controls volume up/down/mute. Right encoder PGUP/PGDOWN.
+## Layers
+
+### BASE
+```
+.-----------------------------------------.                    .-----------------------------------------.
+|  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |                    |  F7  |  F8  |  F9  |  F10 |  F11 |  F12 |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+| Snip |   W  |   L  |   Y  |   P  |   B  |                    |   Z  |   F  |   O  |   U  |   '  |  \   |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|   -  |   C  |   R  |   S  |   T  |   G  |                    |   M  |   N  |   E  |   I  |   A  |   _  |
+|      | Space|  Alt | Ctrl | Shift|      |                    |      |Shift | Ctrl |  Alt |      |      |
+|------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+|   :  |   Q  |   J  |   V  |   D  |   K  |  mute |    | zoom  |   X  |   H  |   ,  |   .  |   ;  |   /  |
+'-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+              |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
+              |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+              '------'------'------'------'-------'    '-------'------'------'------'------'
+```
+
+### NAV
+```
+.-----------------------------------------.                    .-----------------------------------------.
+|      |      |      |      |      |      |                    |      |      |      |      |      | LLOCK|
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |      |      |      |      |                    | PgUp | Home |  Up  |  End | Redo |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |  Alt | Ctrl | Shift|      |                    | PgDn | Left | Down | Right| Undo |      |
+|------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+|      |      |      |      |      |      |       |    |       |Select| Copy | Paste|  Cut |Select|Ctrl+A|
+|      |      |      |      |      |      |       |    |       | word |      |      |      | line |      |
+'-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+              |      |      |      |      |       |    |       |      |      |      |      |
+              '------'------'------'------'-------'    '-------'------'------'------'------'
+```
+
+### NUM
+```
+.-----------------------------------------.                    .-----------------------------------------.
+|      |      |      |      |      |      |                    | Calc |      |      |      |      | LLOCK|
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |      |      |      |      |                    |   :  |   7  |   8  |   9  |   =  |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |  Alt | Ctrl | Shift|      |                    |   +  |   4  |   5  |   6  |   *  |      |
+|------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+|      |      |      |      |      |      |       |    |       |   -  |   1  |   2  |   3  |   /  |      |
+'-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+              |      |      |      |      |       |    |       |      |      |   0  |   .  |
+              '------'------'------'------'-------'    '-------'------'------'------'------'
+```
+
+### SYM
+```
+.-----------------------------------------.                    .-----------------------------------------.
+|      |      |      |      |      |      |                    |      |      |      |      |      | LLOCK|
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |   _  |   <  |   >  |   "  |   `  |                    |   &  |  =>  |   [  |   ]  |   %  |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |   !  |   -  |   +  |   =  |   #  |                    |   |  |   :  |   (  |   )  |   ?  |      |
+|------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+|      |   ^  |   /  |   *  |   \  |  ../ |       |    |       |   ~  |   $  |   {  |   }  |   @  |      |
+'-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+              |      |      |      |      |       |    |       |      |      |      |      |
+              '------'------'------'------'-------'    '-------'------'------'------'------'
+```
+
+### MOUSE
+```
+.-----------------------------------------.                    .-----------------------------------------.
+|      |      |      |      |      |      |                    |      |      |      |      |      | LLOCK|
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |      |      |      |      |                    |DClick|LClick|  Up  |RClick|      |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |  Alt | Ctrl | Shift|      |                    |      | Left | Down | Right|      |      |
+|------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+|      |      |      |      |      |      |       |    |       |      | WH-L | WH-U | WH-D | WH-R |      |
+'-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+              |      |      |      |      |       |    |       |LLOCK |      |      |      |
+              '------'------'------'------'-------'    '-------'------'------'------'------'
+```
+
+### PWT (Power Toys)
+```
+.-----------------------------------------.                    .-----------------------------------------.
+|      |      |      |      |      |      |                    |      |      |      |      |      | Sleep|
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |      |      |W+PgUp|      |      |                    |      |      |      |      |      |      |
+|------+------+------+------+------+------|                    |------+------+------+------+------+------|
+|      |W+S+C |W+A+Sp|W+PgDn|W+S+T |      |                    |      |      |      |      |      |      |
+|------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
+|      |      |      |W+S+V |      |      |       |    |       |      |      |      |      |      |      |
+'-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
+              |      |      |      |      |       |    |       |      |      |      |      |
+              '------'------'------'------'-------'    '-------'------'------'------'------'
+```
+
+## Building
+
+### Prerequisites (Windows)
+
+Install QMK MSYS from: https://github.com/qmk/qmk_distro_msys/releases/latest
+
+After installation, open **QMK MSYS** from the Start Menu and run:
+
+```bash
+qmk setup -H /path/to/your/qmk_firmware
+```
+
+### Compile
+
+Open **QMK MSYS** and run:
+
+```bash
+qmk compile -c -kb sofle/rev1 -km anmalkov -e CONVERT_TO=sparkfun_pm2040
+```
+
+### Flash
+
+```bash
+qmk flash -c -kb sofle/rev1 -km anmalkov -e CONVERT_TO=sparkfun_pm2040
+```
+
+**Manual flashing (drag-and-drop):**
+
+1. Connect the **left** half via USB
+2. **Double-click** the reset button on the PCB — a new USB drive named **RPI-RP2** will appear
+3. Copy the compiled `.uf2` file (e.g. `sofle_rev1_anmalkov_sparkfun_pm2040.uf2` from the QMK root directory) onto the **RPI-RP2** drive
+4. The board will reboot automatically after the copy completes
+5. Disconnect the left half, connect the **right** half via USB, and repeat steps 2–4
