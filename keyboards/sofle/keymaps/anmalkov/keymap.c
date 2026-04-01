@@ -14,6 +14,7 @@
 #define ESC_SYM LT(SYM, KC_ESC)
 #define DEL_SYM LT(SYM, KC_DEL)
 #define TAB_NUM LT(NUM, KC_TAB)
+#define PWT_WH LT(PWT, KC_H)
 
 /* Layers
                  BASE / QWERTY
@@ -79,8 +80,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |   :  |   Q  |   J  |   V  |   D  |   K  |  mute |    | zoom  |   X  |   H  |   ,  |   .  |   ;  |   /  |
  * |      |      |      |      |      |      |       |    |       |      |      |      |      |      |      |
  * '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
- *               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
- *               |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+ *               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del | Win+H|  Os  |
+ *               |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM | PWT  |      |
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [BASE] = LAYOUT(
@@ -88,7 +89,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   SGUI(KC_S), KC_W,  KC_L,         KC_Y,         KC_P,         KC_B,                             KC_Z,    KC_F,         KC_O,         KC_U,         KC_QUOT, KC_BSLS,
   KC_MINS,    C_SPC, LALT_T(KC_R), LCTL_T(KC_S), LSFT_T(KC_T), KC_G,                             KC_M,    RSFT_T(KC_N), RCTL_T(KC_E), LALT_T(KC_I), KC_A,    KC_UNDS,
   KC_COLN,    KC_Q,  KC_J,         KC_V,         KC_D,         KC_K,       KC_MUTE,     _______, KC_X,    KC_H,         KC_COMM,      KC_DOT,       KC_SCLN, KC_SLSH,
-                     KC_LGUI,      MO(MOUSE),    ESC_SYM,      BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      MO(PWT),      KC_RGUI
+                     KC_LGUI,      MO(MOUSE),    ESC_SYM,      BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      PWT_WH,       KC_RGUI
 ),
 
 /* QWERTY
@@ -102,8 +103,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
  * |   :  |   Z  |   X  |   C  |   V  |   B  |  mute |    | zoom  |   N  |   M  |   ,  |   .  |   ;  |   /  |
  * '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
- *               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
- *               |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+ *               |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del | Win+H|  Os  |
+ *               |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM | PWT  |      |
  *               '------'------'------'------'-------'    '-------'------'------'------'------'
  */
 [QWERTY] = LAYOUT(
@@ -111,7 +112,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   SGUI(KC_S), KC_Q,  KC_W,         KC_E,         KC_R,          KC_T,                             KC_Y,    KC_U,         KC_I,         KC_O,         KC_P,    KC_BSLS,
   KC_MINS,    A_SPC, LALT_T(KC_S), LCTL_T(KC_D), LSFT_T(KC_F),  KC_G,                             KC_H,    RSFT_T(KC_J), RCTL_T(KC_K), LALT_T(KC_L), KC_QUOT, KC_UNDS,
   KC_COLN,    KC_Z,  KC_X,         KC_C,         KC_V,          KC_B,       KC_MUTE,     _______, KC_N,    KC_M,         KC_COMM,      KC_DOT,       KC_SCLN, KC_SLSH,
-                     KC_LGUI,      MO(MOUSE),    ESC_SYM,       BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      MO(PWT),      KC_RGUI
+                     KC_LGUI,      MO(MOUSE),    ESC_SYM,       BSPACE_NAV, TAB_NUM,     KC_ENT,  KC_SPC,  DEL_SYM,      PWT_WH,       KC_RGUI
 ),
 
 /* NAV
@@ -272,6 +273,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   #ifdef ORBITAL_MOUSE_ENABLE
   if (!process_orbital_mouse(keycode, record)) { return false; }
   #endif  // ORBITAL_MOUSE_ENABLE
+  // If C_SPC/A_SPC is pending and another key is pressed, resolve as tap immediately
+  if (c_spc_timer && record->event.pressed && keycode != C_SPC && keycode != A_SPC) {
+    tap_code(c_spc_keycode == C_SPC ? KC_C : KC_A);
+    c_spc_timer = 0;
+  }
   if (record->event.pressed) {
     switch (keycode) {
       case C_SPC:  // Tap: C, Hold: Space
@@ -295,6 +301,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       case BTN1_DBL:  // Double left mouse click.
         SEND_STRING_DELAY(SS_TAP(X_MS_BTN1) SS_TAP(X_MS_BTN1), MOUSE_DBL_CLICK_DELAY);
         return false;
+      case PWT_WH:  // Tap: Win+H, Hold: PWT layer
+        if (record->tap.count) {
+          tap_code16(LGUI(KC_H));
+          return false;
+        }
+        break;
       case DF_TOGL:  // Toggle default layer between BASE and QWERTY
         if (get_highest_layer(default_layer_state) == QWERTY) {
           set_single_persistent_default_layer(BASE);

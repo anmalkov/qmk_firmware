@@ -30,8 +30,8 @@ Custom keymap by [@anmalkov](https://github.com/anmalkov) using a modified alpha
 |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
 |   :  |   Q  |   J  |   V  |   D  |   K  |  mute |    | zoom  |   X  |   H  |   ,  |   .  |   ;  |   /  |
 '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
-              |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
-              |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+              |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del | Win+H|  Os  |
+              |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM | PWT  |      |
               '------'------'------'------'-------'    '-------'------'------'------'------'
 ```
 
@@ -48,8 +48,8 @@ Alternative base layer with standard QWERTY alpha keys. Same thumb row, home row
 |------+------+------+------+------+------|-------.    .-------|------+------+------+------+------+------|
 |   :  |   Z  |   X  |   C  |   V  |   B  |  mute |    | zoom  |   N  |   M  |   ,  |   .  |   ;  |   /  |
 '-------------+------+------+------+------+-------|    |-------|------+------+------+------+-------------'
-              |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del |  PWT |  Os  |
-              |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM |      |      |
+              |  Os  |      |  Esc |Backsp|  Tab  |    | Enter | Space|  Del | Win+H|  Os  |
+              |      | MOUSE|  SYM | NAV  |  NUM  |    |       |      |  SYM | PWT  |      |
               '------'------'------'------'-------'    '-------'------'------'------'------'
 ```
 
